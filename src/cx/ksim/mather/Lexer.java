@@ -1,0 +1,73 @@
+package cx.ksim.mather;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public class Lexer {
+
+	private List<Token> tokens;
+	private int cursor = 0;
+	
+	public Lexer(String expr) {
+		this.tokens = new ArrayList<>();
+		tokenize(expr);
+	}
+	
+	private void tokenize(String expr) {
+		for(int i = 0, len = expr.length(); i < len; i++) {
+			char _char = expr.charAt(i);
+			if(Character.isWhitespace(_char)) continue;
+
+			if(Character.isDigit(_char) || _char == '.') {
+				boolean isFloat = false;
+				String num = Character.toString(_char);
+				i++;
+				if(_char == '.') isFloat = true;
+				while(i < len && 
+						(Character.isDigit(_char = expr.charAt(i)) || _char == '.')) {
+					if(_char == '.') {
+						if(isFloat) {
+							throw new IllegalCharacterException(
+									String.format("You cannot have a [%s] here", _char));
+						} else {
+							isFloat = true;
+						}
+					}
+					num += Character.toString(_char);
+					i++;
+				}
+				tokens.add(new Token(TokenKind.INTEGER, num));
+				i--;
+			} else if(_char >= 'a' && _char<= 'z') {
+
+			} else if (_char == '+') {
+				tokens.add(new Token(TokenKind.PLUS, Character.toString(_char)));
+			} else if (_char == '-') {
+				tokens.add(new Token(TokenKind.MINUS, Character.toString(_char)));
+			} else if (_char == '*') {
+				tokens.add(new Token(TokenKind.MULT, Character.toString(_char)));
+			} else if (_char == '/') {
+				tokens.add(new Token(TokenKind.DIV, Character.toString(_char)));
+			} else {
+				throw new UnknowCharacterException(
+						String.format("Unknown character [%s] found\n", _char));
+			}
+		}
+	}
+	
+	public void dump() {
+		System.out.println(tokens);
+	}
+
+	public Optional<Token> peek() {
+		if(cursor < 0 || cursor >= tokens.size()) {
+			return Optional.empty();
+		}
+		return Optional.of(tokens.get(cursor));
+	}
+
+	public void next() { cursor++; }
+
+
+}
