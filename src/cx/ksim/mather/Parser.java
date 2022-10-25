@@ -11,7 +11,22 @@ public class Parser {
 
 //		Expression = [ "-" | "+" ] Term { "-" | "+" Term };
 		private Node parseExpression() {
-			Node a = parseTerm();
+			Node a = null;
+			if(lexer.peek().isPresent()) {
+				Token token = lexer.peek().get();
+				if(token.kind() == TokenKind.MINUS) {
+					lexer.next();
+					a = parseTerm();
+					a = new UnaryExpression(a, "-");
+				} else if(token.kind() == TokenKind.PLUS) {
+					lexer.next();
+					a = parseTerm();					
+				} else {
+					a = parseTerm();
+				}
+			} else {
+				throw new IllegalTokenException("No token provided");
+			}
 			while(lexer.peek().isPresent()) {
 				Token token = lexer.peek().get();
 				if(token.kind() == TokenKind.PLUS) {
@@ -31,7 +46,23 @@ public class Parser {
 
 //		Term = Factor { "*" | "/" Factor };
 		private Node parseTerm() {
-			return parseFactor();
+			Node a = parseFactor();
+			
+			while(lexer.peek().isPresent()) {
+				Token token = lexer.peek().get();
+				if(token.kind() == TokenKind.MULT) {
+					lexer.next();
+					Node b = parseFactor();
+					a = new BinaryExpression(a, b, "*");
+				} else if(token.kind() == TokenKind.DIV) {
+					lexer.next();
+					Node b = parseFactor();
+					a = new BinaryExpression(a, b, "/");
+				} else {
+					return a;
+				}
+			}
+			return a;
 		}
 
 //		Factor = ( Number | "(" Expression ")"

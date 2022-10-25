@@ -26,12 +26,9 @@ public class BinaryExpression implements Node {
 	@Override
 	public String print() {
 		return switch (operator) {
-		case "+" -> String.format("(%s %s %s)", left.print(), operator, right.print());
-		case "-" -> String.format("(%s %s %s)", left.print(), operator, right.print());
-		case "*" -> String.format("(%s %s %s)", left.print(), operator, right.print());
-		case "/" -> String.format("(%s %s %s)", left.print(), operator, right.print());
-		case "^" -> String.format("(%s %s %s)", left.print(), operator, right.print());
-		default -> throw new IllegalArgumentException("Unexpected value: " + operator);
+			case "+","-","*","/","^" -> 
+				String.format("(%s %s %s)", left.print(), operator, right.print());
+			default -> throw new IllegalArgumentException("Unexpected value: " + operator);
 		};
 	}
 
