@@ -57,5 +57,33 @@ class ParserTest {
 		Node a = parser.parse("2*3+2/2");
 		assertThat(a.eval()).isEqualTo(7.0);
 	}
+	
+	@Test
+	void itshouldPrintNegative8() {
+		Parser parser = new Parser();
+		Node a = parser.parse("2-(3+7)");
+		assertThat(a.eval()).isEqualTo(-8.0);
+	}
+	
+	@Test
+	void itshouldPrint6() {
+		Parser parser = new Parser();
+		Node a = parser.parse("2-3+7");
+		assertThat(a.eval()).isEqualTo(6.0);
+	}
+	
+	@Test
+	void itshouldPrint21() {
+		Parser parser = new Parser();
+		Node a = parser.parse("9/3*7");
+		assertThat(a.eval()).isEqualTo(21.0);
+	}
+	
+	@Test
+	void itshouldPrint3() {
+		Parser parser = new Parser();
+		Node a = parser.parse("63/((3*7)                     )");
+		assertThat(a.eval()).isEqualTo(3.0);
+	}
 
 }

@@ -37,7 +37,7 @@ public class Lexer {
 					num += Character.toString(_char);
 					i++;
 				}
-				tokens.add(new Token(TokenKind.INTEGER, num));
+				tokens.add(new Token(isFloat ? TokenKind.FLOAT : TokenKind.INTEGER, num));
 				i--;
 			} else if(_char >= 'a' && _char<= 'z') {
 
@@ -49,7 +49,12 @@ public class Lexer {
 				tokens.add(new Token(TokenKind.MULT, Character.toString(_char)));
 			} else if (_char == '/') {
 				tokens.add(new Token(TokenKind.DIV, Character.toString(_char)));
-			} else {
+			} else if (_char == '(') {
+				tokens.add(new Token(TokenKind.OPEN_PAREN, Character.toString(_char)));
+			} else if (_char == ')') {
+				tokens.add(new Token(TokenKind.CLOSE_PAREN, Character.toString(_char)));
+			}
+			else {
 				throw new UnknowCharacterException(
 						String.format("Unknown character [%s] found\n", _char));
 			}
