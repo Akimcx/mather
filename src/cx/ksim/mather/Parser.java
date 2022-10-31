@@ -6,7 +6,12 @@ public class Parser {
 
 	public Node parse(String expr) {
 		lexer = new Lexer(expr);
-		return parseExpression();
+		Node a = parseExpression();
+		if(lexer.peek().isPresent()) {
+			throw new IllegalTokenException(
+					String.format("Unhandle token %s", lexer.peek().get()));
+		}
+		return a;
 	}
 
 	//		Expression = [ "-" | "+" ] Term { "-" | "+" Term };
@@ -69,20 +74,56 @@ public class Parser {
 		Token token = lexer.peek().orElseThrow(
 				() -> new IllegalTokenException("No token provided"));
 
+		Node a;
 		if(token.kind() == TokenKind.INTEGER || token.kind() == TokenKind.FLOAT) {
 			lexer.next();
-			return new LiteralNode(Double.parseDouble(token.value()));
+			a = new LiteralNode(Double.parseDouble(token.value()));
+			
+			if(lexer.peek().isPresent()) {
+				token = lexer.peek().get();
+				if(token.kind() == TokenKind.UNARY_OP) {
+					lexer.next();
+					a = new UnaryExpression(a, token.value());
+				}
+			}
+			return a;
 		}
 		
 		if(token.kind() == TokenKind.OPEN_PAREN) {
 			lexer.next();
-			Node a = parseExpression();
+			a = parseExpression();
 			if(lexer.peek().get().kind() != TokenKind.CLOSE_PAREN) {
 				throw new IllegalTokenException(
 						String.format("Expected %s but got %s\n",
 								TokenKind.CLOSE_PAREN, lexer.peek().get()));
 			}
 			lexer.next();
+			
+			if(lexer.peek().isPresent()) {
+				token = lexer.peek().get();
+				if(token.kind() == TokenKind.UNARY_OP) {
+					lexer.next();
+					a = new UnaryExpression(a, token.value());
+				}
+			}
+			return a;
+		}
+		
+		if(token.kind() == TokenKind.UNARY_OP) {
+			assert (false) : "Not Implemented Yet!";
+		}
+		
+		if(token.kind() == TokenKind.FUNC_CALL) {
+			lexer.next();
+			a = new UnaryExpression(parseExpression(), token.value());
+			
+			if(lexer.peek().isPresent()) {
+				token = lexer.peek().get();
+				if(token.kind() == TokenKind.UNARY_OP) {
+					lexer.next();
+					a = new UnaryExpression(a, token.value());
+				}
+			}
 			return a;
 		}
 
@@ -93,7 +134,8 @@ public class Parser {
 	public static void main(String[] args) {
 		Parser parser = new Parser();
 		for( String arg : args) {
-			System.out.printf("%s -> %s\n", arg, parser.parse(arg));
+			Node a = parser.parse(arg);
+			System.out.printf("%s -> %s\n", arg, a.eval());
 		}
 	}
 }

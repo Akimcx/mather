@@ -1,11 +1,13 @@
 package cx.ksim.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
 
 import cx.ksim.mather.Lexer;
 import cx.ksim.mather.TokenKind;
+import cx.ksim.mather.UnknowCharacterException;
 
 class LexerTest {
 
@@ -20,7 +22,15 @@ class LexerTest {
 	
 	@Test
 	void itShouldThrowAnUnknowCharacterException() {
-		assertThat(new Lexer("1x1"));
+		assertThatThrownBy(() -> {
+			new Lexer("1x1");
+		}).isInstanceOf(UnknowCharacterException.class)
+		.hasMessage("Unknown function call x");
+	}
+	
+	@Test
+	void itShouldLexeFactToken() {
+		Lexer lexer = new Lexer("6!");
 	}
 	
 	@Test

@@ -40,7 +40,18 @@ public class Lexer {
 				tokens.add(new Token(isFloat ? TokenKind.FLOAT : TokenKind.INTEGER, num));
 				i--;
 			} else if(_char >= 'a' && _char<= 'z') {
-
+				String funcCall = _char+"";
+				i++;
+				while(i < len && ( (_char = expr.charAt(i)) >= 'a') && (_char <= 'z')	) {
+					funcCall += _char+"";
+					i++;
+				}
+				i--;
+				switch(funcCall) {
+					case "sin","cos","tang" -> tokens.add(new Token(TokenKind.FUNC_CALL,funcCall));
+					default -> throw new UnknowCharacterException(
+							String.format("Unknown function call %s", funcCall));
+				}
 			} else if (_char == '+') {
 				tokens.add(new Token(TokenKind.PLUS, Character.toString(_char)));
 			} else if (_char == '-') {
@@ -53,6 +64,8 @@ public class Lexer {
 				tokens.add(new Token(TokenKind.OPEN_PAREN, Character.toString(_char)));
 			} else if (_char == ')') {
 				tokens.add(new Token(TokenKind.CLOSE_PAREN, Character.toString(_char)));
+			} else if (_char == '!') {
+				tokens.add(new Token(TokenKind.UNARY_OP, Character.toString(_char)));
 			}
 			else {
 				throw new UnknowCharacterException(
