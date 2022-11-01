@@ -14,7 +14,14 @@ public class BinaryExpression implements Node {
 	@Override
 	public double eval() {
 		return switch (operator) {
-		case "+" -> (left.eval() + right.eval());
+		case "+" -> {
+			if(right instanceof UnaryExpression) {
+				if( ((UnaryExpression) right).getOperator().equals("%") ) {
+					yield (left.eval() + (right.eval() * left.eval()));
+				}
+			}
+			yield (left.eval() + right.eval());				
+		}
 		case "-" -> (left.eval() - right.eval());
 		case "*" -> (left.eval() * right.eval());
 		case "/" -> (left.eval() / right.eval());
@@ -31,10 +38,12 @@ public class BinaryExpression implements Node {
 			default -> throw new IllegalArgumentException("Unexpected value: " + operator);
 		};
 	}
+	
+	
 
-	@Override
-	public String toString() {
-		return print();
-	}
+//	@Override
+//	public String toString() {
+//		return print();
+//	}
 
 }

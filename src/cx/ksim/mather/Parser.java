@@ -115,7 +115,20 @@ public class Parser {
 		
 		if(token.kind() == TokenKind.FUNC_CALL) {
 			lexer.next();
+			if(lexer.peek().get().kind() != TokenKind.OPEN_PAREN) {
+				throw new IllegalTokenException(
+						String.format("Expected %s but got %s\n",
+								TokenKind.OPEN_PAREN, lexer.peek().get()));
+			}
+			lexer.next();
 			a = new UnaryExpression(parseExpression(), token.value());
+			
+			if(lexer.peek().get().kind() != TokenKind.CLOSE_PAREN) {
+				throw new IllegalTokenException(
+						String.format("Expected %s but got %s\n",
+								TokenKind.CLOSE_PAREN, lexer.peek().get()));
+			}
+			lexer.next();
 			
 			if(lexer.peek().isPresent()) {
 				token = lexer.peek().get();
@@ -133,9 +146,11 @@ public class Parser {
 
 	public static void main(String[] args) {
 		Parser parser = new Parser();
-		for( String arg : args) {
-			Node a = parser.parse(arg);
-			System.out.printf("%s -> %s\n", arg, a.eval());
-		}
+		Node a = parser.parse("50+50%");
+		System.out.println(a.eval());
+//		for( String arg : args) {
+//			Node a = parser.parse(arg);
+//			System.out.printf("%s -> %s\n", arg, a.eval());
+//		}
 	}
 }

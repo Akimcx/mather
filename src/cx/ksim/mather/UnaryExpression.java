@@ -26,10 +26,15 @@ public class UnaryExpression implements Node{
 			case "sin" -> Math.sin(node.eval());
 			case "cos" -> Math.cos(node.eval());
 			case "tang" -> Math.tan(node.eval());
+			case "%" -> (node.eval() / 100);
 			default -> throw new IllegalArgumentException("Unexpected value: " + operator);
 		};
 	}
 
+	public String getOperator() {
+		return operator;
+	}
+	
 	@Override
 	public String print() {
 		return switch(operator) {
@@ -39,6 +44,7 @@ public class UnaryExpression implements Node{
 			case "sin" -> String.format("sin(%s)", node.print());
 			case "cos" -> String.format("con(%s)", node.print());
 			case "tang" -> String.format("tang(%s)", node.print());
+			case "%" -> String.format("(%s)", node.print());
 			default -> throw new IllegalArgumentException("Unexpected value: " + operator);
 		};
 	}

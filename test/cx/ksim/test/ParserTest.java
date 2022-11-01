@@ -133,5 +133,61 @@ class ParserTest {
 		Node a = parser.parse("63/((3*7)                     )");
 		assertThat(a.eval()).isEqualTo(3.0);
 	}
+	
+	@Test
+	void itshouldPrint22() {
+		Parser parser = new Parser();
+		Node a = parser.parse("42/7*4-9+7");
+		assertThat(a.eval()).isEqualTo(22.0);
+	}
+	
+	@Test
+	void itshouldPrint83() {
+		Parser parser = new Parser();
+		Node a = parser.parse("60/5*7-2+1");
+		assertThat(a.eval()).isEqualTo(83.0);
+	}
+	
+	@Test
+	void itshouldPrint2490() {
+		Parser parser = new Parser();
+		Node a = parser.parse("(450*3)+(570*2)");
+		assertThat(a.eval()).isEqualTo(2490.0);
+	}
+	
+	@Test
+	void itshouldPrint50Percent() {
+		Parser parser = new Parser();
+		Node a = parser.parse("50%");
+		assertThat(a.eval()).isEqualTo(0.5);
+	}
+	
+	@Test
+	void itshouldPrint75() {
+		Parser parser = new Parser();
+		Node a = parser.parse("50+50%");
+		assertThat(a.eval()).isEqualTo(75.0);
+	}
+	
+	@Test
+	void itshouldPrint130() {
+		Parser parser = new Parser();
+		Node a = parser.parse("100+30%");
+		assertThat(a.eval()).isEqualTo(130.0);
+	}
+	
+	@Test
+	void itshouldPrint536Point75() {
+		Parser parser = new Parser();
+		Node a = parser.parse("475+13%");
+		assertThat(a.eval()).isEqualTo(536.75);
+	}
+	
+	@Test
+	void itshouldPrintPoint75() {
+		Parser parser = new Parser();
+		Node a = parser.parse("75%");
+		assertThat(a.eval()).isEqualTo(.75);
+	}
 
 }
