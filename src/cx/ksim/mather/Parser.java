@@ -49,22 +49,40 @@ public class Parser {
 
 	//		Term = Factor { "*" | "/" Factor };
 	private Node parseTerm() {
-		Node a = parseFactor();
+		Node a = parseExponent();
 
 		while(lexer.peek().isPresent()) {
 			Token token = lexer.peek().get();
 			if(token.kind() == TokenKind.MULT) {
 				lexer.next();
-				Node b = parseFactor();
+				Node b = parseExponent();
 				a = new BinaryExpression(a, b, "*");
 			} else if(token.kind() == TokenKind.DIV) {
 				lexer.next();
-				Node b = parseFactor();
+				Node b = parseExponent();
 				a = new BinaryExpression(a, b, "/");
 			} else {
 				return a;
 			}
 		}
+		
+		return a;
+	}
+	
+	private Node parseExponent() {
+		Node a = parseFactor();
+
+		while(lexer.peek().isPresent()) {
+			Token token = lexer.peek().get();
+			if(token.kind() == TokenKind.EXPONENT) {
+				lexer.next();
+				Node b = parseFactor();
+				a = new BinaryExpression(a, b, "^");
+			} else {
+				return a;
+			}
+		}
+		
 		return a;
 	}
 
@@ -146,11 +164,11 @@ public class Parser {
 
 	public static void main(String[] args) {
 		Parser parser = new Parser();
-		Node a = parser.parse("50+50%");
-		System.out.println(a.eval());
-//		for( String arg : args) {
-//			Node a = parser.parse(arg);
-//			System.out.printf("%s -> %s\n", arg, a.eval());
-//		}
+		for( String arg : args) {
+			Node a = parser.parse(arg);
+			System.out.printf("%s -> %s\n", arg, a.eval());
+		}
+//			Node a = parser.parse("1*3^2");
+//			System.out.printf("%s -> %s\n", "1*3^2", a.eval());
 	}
 }

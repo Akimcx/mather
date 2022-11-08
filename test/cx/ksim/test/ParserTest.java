@@ -14,10 +14,12 @@ import cx.ksim.mather.TokenKind;
 class ParserTest {
 	
 	@Test
-	void itshouldReturn1() {
+	void itshouldPrint1() {
 		Parser parser = new Parser();
 		Node a = parser.parse("1");
-		assertThat(a.print()).isEqualTo("1.0");
+		assertThat(a.eval()).isEqualTo(1.0);
+		a = parser.parse("1+1-1");
+		assertThat(a.eval()).isEqualTo(1.0);
 	}
 	
 	@Test
@@ -34,12 +36,18 @@ class ParserTest {
 		Parser parser = new Parser();
 		Node a = parser.parse("1+1");
 		assertThat(a.eval()).isEqualTo(2.0);
+		a = parser.parse("2^1");
+		assertThat(a.eval()).isEqualTo(2.0);
 	}
 	
 	@Test
 	void itshouldPrintNegative1() {
 		Parser parser = new Parser();
 		Node a = parser.parse("-1");
+		assertThat(a.eval()).isEqualTo(-1.0);
+		a = parser.parse("1*(-1)");
+		assertThat(a.eval()).isEqualTo(-1.0);
+		a = parser.parse("5-6");
 		assertThat(a.eval()).isEqualTo(-1.0);
 	}
 	
@@ -51,16 +59,11 @@ class ParserTest {
 	}
 	
 	@Test
-	void itshouldPrint1() {
-		Parser parser = new Parser();
-		Node a = parser.parse("1+1-1");
-		assertThat(a.eval()).isEqualTo(1.0);
-	}
-	
-	@Test
 	void itshouldPrint8() {
 		Parser parser = new Parser();
 		Node a = parser.parse("2*3+2");
+		assertThat(a.eval()).isEqualTo(8.0);
+		a = parser.parse("2^3");
 		assertThat(a.eval()).isEqualTo(8.0);
 	}
 	
@@ -68,6 +71,8 @@ class ParserTest {
 	void itshouldPrint7() {
 		Parser parser = new Parser();
 		Node a = parser.parse("2*3+2/2");
+		assertThat(a.eval()).isEqualTo(7.0);
+		a = parser.parse("4+3*(8-2*(6-3))/2");
 		assertThat(a.eval()).isEqualTo(7.0);
 	}
 	
@@ -82,6 +87,10 @@ class ParserTest {
 	void itshouldPrint6() {
 		Parser parser = new Parser();
 		Node a = parser.parse("2-3+7");
+		assertThat(a.eval()).isEqualTo(6.0);
+		a = parser.parse("3-3+6");
+		assertThat(a.eval()).isEqualTo(6.0);
+		a = parser.parse("45/5-3");
 		assertThat(a.eval()).isEqualTo(6.0);
 	}
 	
@@ -130,7 +139,7 @@ class ParserTest {
 	@Test
 	void itshouldPrint3() {
 		Parser parser = new Parser();
-		Node a = parser.parse("63/((3*7)                     )");
+		Node a = parser.parse("63/  ((3   *7)        )");
 		assertThat(a.eval()).isEqualTo(3.0);
 	}
 	
@@ -139,6 +148,13 @@ class ParserTest {
 		Parser parser = new Parser();
 		Node a = parser.parse("42/7*4-9+7");
 		assertThat(a.eval()).isEqualTo(22.0);
+	}
+	
+	@Test
+	void itshouldPrint27() {
+		Parser parser = new Parser();
+		Node a = parser.parse("(4*3/6+1)*3^2");
+		assertThat(a.eval()).isEqualTo(27.0);
 	}
 	
 	@Test
@@ -189,5 +205,13 @@ class ParserTest {
 		Node a = parser.parse("75%");
 		assertThat(a.eval()).isEqualTo(.75);
 	}
+	
+	@Test
+	void itshouldPrint9() {
+		Parser parser = new Parser();
+		Node a = parser.parse("3^2");
+		assertThat(a.eval()).isEqualTo(9);
+	}
+
 
 }

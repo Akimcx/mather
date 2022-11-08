@@ -68,6 +68,8 @@ public class Lexer {
 				tokens.add(new Token(TokenKind.UNARY_OP, Character.toString(_char)));
 			} else if (_char == '%') {
 				tokens.add(new Token(TokenKind.UNARY_OP, Character.toString(_char)));
+			} else if (_char == '^') {
+				tokens.add(new Token(TokenKind.EXPONENT, Character.toString(_char)));
 			}
 			else {
 				throw new UnknowCharacterException(
