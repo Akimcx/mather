@@ -23,10 +23,12 @@ public class UnaryExpression implements Node{
 			case "+" -> node.eval();
 			case "-" -> -node.eval();
 			case "!" -> fact(node.eval());
+			case "%" -> (node.eval() / 100);
 			case "sin" -> Math.sin(node.eval());
 			case "cos" -> Math.cos(node.eval());
 			case "tang" -> Math.tan(node.eval());
-			case "%" -> (node.eval() / 100);
+			case "log" -> Math.log10(node.eval());
+			case "ln" -> Math.log(node.eval());
 			default -> throw new IllegalArgumentException("Unexpected value: " + operator);
 		};
 	}

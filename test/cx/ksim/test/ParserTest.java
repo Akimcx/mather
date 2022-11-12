@@ -14,11 +14,26 @@ import cx.ksim.mather.TokenKind;
 class ParserTest {
 	
 	@Test
+	void itshouldPrint0() {
+		Parser parser = new Parser();
+		Node a = parser.parse("0");
+		assertThat(a.eval()).isEqualTo(0.0);
+		a = parser.parse("1+1-2");
+		assertThat(a.eval()).isEqualTo(0.0);
+		a = parser.parse("log(1)");
+		assertThat(a.eval()).isEqualTo(0.0);
+		a = parser.parse("ln(1)");
+		assertThat(a.eval()).isEqualTo(0.0);
+	}
+	
+	@Test
 	void itshouldPrint1() {
 		Parser parser = new Parser();
 		Node a = parser.parse("1");
 		assertThat(a.eval()).isEqualTo(1.0);
 		a = parser.parse("1+1-1");
+		assertThat(a.eval()).isEqualTo(1.0);
+		a = parser.parse("log(10)");
 		assertThat(a.eval()).isEqualTo(1.0);
 	}
 	

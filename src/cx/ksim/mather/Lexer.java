@@ -48,7 +48,7 @@ public class Lexer {
 				}
 				i--;
 				switch(funcCall) {
-					case "sin","cos","tang" -> tokens.add(new Token(TokenKind.FUNC_CALL,funcCall));
+					case "sin","cos","tang","log","ln" -> tokens.add(new Token(TokenKind.FUNC_CALL,funcCall));
 					default -> throw new UnknowCharacterException(
 							String.format("Unknown function call %s", funcCall));
 				}

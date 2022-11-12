@@ -127,10 +127,6 @@ public class Parser {
 			return a;
 		}
 		
-		if(token.kind() == TokenKind.UNARY_OP) {
-			assert (false) : "Not Implemented Yet!";
-		}
-		
 		if(token.kind() == TokenKind.FUNC_CALL) {
 			lexer.next();
 			if(lexer.peek().get().kind() != TokenKind.OPEN_PAREN) {
@@ -157,6 +153,10 @@ public class Parser {
 			}
 			return a;
 		}
+		
+		if(token.kind() == TokenKind.UNARY_OP) {
+			assert (false) : "Not Implemented Yet!";
+		}
 
 		throw new IllegalTokenException(
 				String.format("You cannot have the token [%s] here", token));
@@ -166,7 +166,7 @@ public class Parser {
 		Parser parser = new Parser();
 		for( String arg : args) {
 			Node a = parser.parse(arg);
-			System.out.printf("%s -> %s\n", arg, a.eval());
+			System.out.printf("%s = %s\n", arg, a.eval());
 		}
 //			Node a = parser.parse("1*3^2");
 //			System.out.printf("%s -> %s\n", "1*3^2", a.eval());
