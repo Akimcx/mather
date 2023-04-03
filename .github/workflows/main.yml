@@ -15,7 +15,7 @@ jobs:
           pwd
       - name: Lis item
         run: |
-          ls -l
+          ls -l ../
       - name: Build JAR
         run: |
           javac -d bin src/cx/ksim/mather/*.java
