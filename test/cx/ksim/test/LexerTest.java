@@ -36,9 +36,9 @@ class LexerTest {
 	@Test
 	void itShouldProduceAFLoat() {
 		Lexer lexer = new Lexer("1.");
-		assertThat(lexer.peek().get().kind()).isEqualTo(TokenKind.FLOAT);
+		assertThat(lexer.peek().get().kind()).isEqualTo(TokenKind.NUMBER);
 		lexer = new Lexer(".1");
-		assertThat(lexer.peek().get().kind()).isEqualTo(TokenKind.FLOAT);
+		assertThat(lexer.peek().get().kind()).isEqualTo(TokenKind.NUMBER);
 	}
 	
 	@Test

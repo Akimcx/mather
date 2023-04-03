@@ -1,7 +1,7 @@
 package cx.ksim.mather;
 
 public enum TokenKind {
-	INTEGER,FLOAT,
+	NUMBER,
 	PLUS,MINUS,
 	DIV,MULT,
 	EXPONENT,
