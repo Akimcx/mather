@@ -10,6 +10,9 @@ jobs:
     name: Build & Release
     runs-on: ubuntu-latest
     steps:
+      - name: Print Working Directory
+        run: |
+          pwd
       - name: Build JAR
         run: |
           javac -d bin src/cx/ksim/mather/*.java
