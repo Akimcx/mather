@@ -10,6 +10,9 @@ jobs:
     name: Build & Release
     runs-on: ubuntu-latest
     steps:
+      - name: Checking java version
+        run: |
+          java --version
       - name: Checkout Repo
         uses: actions/checkout@v2.7.0
       - name: Build JAR
