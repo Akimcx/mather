@@ -1,6 +1,6 @@
 package cx.ksim.mather;
 
-public class LiteralNode implements Node {
+public class LiteralNode implements Expression {
 
 	private double value;
 	public LiteralNode(double value) {

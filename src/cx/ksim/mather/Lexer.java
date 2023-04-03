@@ -20,33 +20,34 @@ public class Lexer implements Iterator<Token> {
 
 	private void tokenize(String expr) {
 		for ( int i = 0, len = expr.length(); i < len; i++ ) {
-			char _char = expr.charAt( i );
-			if ( Character.isWhitespace( _char ) )
+			char currentChar = expr.charAt( i );
+			if ( Character.isWhitespace( currentChar ) )
 				continue;
 
-			if ( Character.isDigit( _char ) || _char == '.' ) {
-				boolean isFloat = _char == '.';
-				String num = Character.toString( _char );
+			if ( Character.isDigit( currentChar ) || currentChar == '.' ) {
+				boolean isFloat = currentChar == '.';
+
+				String num = Character.toString( currentChar );
 				i++;
-				while ( i < len && (Character.isDigit( _char = expr.charAt( i ) ) || _char == '.') ) {
-					if ( _char == '.' ) {
+				while ( i < len && (Character.isDigit( currentChar = expr.charAt( i ) ) || currentChar == '.') ) {
+					if ( currentChar == '.' ) {
 						if ( isFloat ) {
 							throw new IllegalCharacterException(
-									String.format( "You cannot have a [%s] here", _char ) );
+									String.format( "You cannot have a [%s] here", currentChar ) );
 						} else {
 							isFloat = true;
 						}
 					}
-					num += Character.toString( _char );
+					num += Character.toString( currentChar );
 					i++;
 				}
 				tokens.add( new Token( TokenKind.NUMBER, num ) );
 				i--;
-			} else if ( _char >= 'a' && _char <= 'z' ) {
-				String funcCall = _char + "";
+			} else if ( currentChar >= 'a' && currentChar <= 'z' ) {
+				String funcCall = currentChar + "";
 				i++;
-				while ( i < len && ((_char = expr.charAt( i )) >= 'a') && (_char <= 'z') ) {
-					funcCall += _char + "";
+				while ( i < len && ((currentChar = expr.charAt( i )) >= 'a') && (currentChar <= 'z') ) {
+					funcCall += currentChar + "";
 					i++;
 				}
 				i--;
@@ -55,26 +56,26 @@ public class Lexer implements Iterator<Token> {
 					default ->
 						throw new UnknowCharacterException( String.format( "Unknown function call %s", funcCall ) );
 				}
-			} else if ( _char == '+' ) {
-				tokens.add( new Token( TokenKind.PLUS, Character.toString( _char ) ) );
-			} else if ( _char == '-' ) {
-				tokens.add( new Token( TokenKind.MINUS, Character.toString( _char ) ) );
-			} else if ( _char == '*' ) {
-				tokens.add( new Token( TokenKind.MULT, Character.toString( _char ) ) );
-			} else if ( _char == '/' ) {
-				tokens.add( new Token( TokenKind.DIV, Character.toString( _char ) ) );
-			} else if ( _char == '(' ) {
-				tokens.add( new Token( TokenKind.OPEN_PAREN, Character.toString( _char ) ) );
-			} else if ( _char == ')' ) {
-				tokens.add( new Token( TokenKind.CLOSE_PAREN, Character.toString( _char ) ) );
-			} else if ( _char == '!' ) {
-				tokens.add( new Token( TokenKind.UNARY_OP, Character.toString( _char ) ) );
-			} else if ( _char == '%' ) {
-				tokens.add( new Token( TokenKind.UNARY_OP, Character.toString( _char ) ) );
-			} else if ( _char == '^' ) {
-				tokens.add( new Token( TokenKind.EXPONENT, Character.toString( _char ) ) );
+			} else if ( currentChar == '+' ) {
+				tokens.add( new Token( TokenKind.PLUS, Character.toString( currentChar ) ) );
+			} else if ( currentChar == '-' ) {
+				tokens.add( new Token( TokenKind.MINUS, Character.toString( currentChar ) ) );
+			} else if ( currentChar == '*' ) {
+				tokens.add( new Token( TokenKind.MULT, Character.toString( currentChar ) ) );
+			} else if ( currentChar == '/' ) {
+				tokens.add( new Token( TokenKind.DIV, Character.toString( currentChar ) ) );
+			} else if ( currentChar == '(' ) {
+				tokens.add( new Token( TokenKind.OPEN_PAREN, Character.toString( currentChar ) ) );
+			} else if ( currentChar == ')' ) {
+				tokens.add( new Token( TokenKind.CLOSE_PAREN, Character.toString( currentChar ) ) );
+			} else if ( currentChar == '!' ) {
+				tokens.add( new Token( TokenKind.UNARY_OP, Character.toString( currentChar ) ) );
+			} else if ( currentChar == '%' ) {
+				tokens.add( new Token( TokenKind.UNARY_OP, Character.toString( currentChar ) ) );
+			} else if ( currentChar == '^' ) {
+				tokens.add( new Token( TokenKind.EXPONENT, Character.toString( currentChar ) ) );
 			} else {
-				throw new UnknowCharacterException( String.format( "Unknown character [%s] found\n", _char ) );
+				throw new UnknowCharacterException( String.format( "Unknown character [%s] found\n", currentChar ) );
 			}
 		}
 	}

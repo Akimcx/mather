@@ -1,11 +1,12 @@
 package cx.ksim.mather;
 
-public class BinaryExpression implements Node {
+public class BinaryExpression implements Expression {
 
-	private Node left;
-	private Node right;
+	private Expression left;
+	private Expression right;
 	private String operator;
-	public BinaryExpression(Node left, Node right, String operator) {
+
+	public BinaryExpression(Expression left, Expression right, String operator) {
 		this.left = left;
 		this.right = right;
 		this.operator = operator;
@@ -13,37 +14,57 @@ public class BinaryExpression implements Node {
 
 	@Override
 	public double eval() {
-		return switch (operator) {
-		case "+" -> {
-			if(right instanceof UnaryExpression) {
-				if( ((UnaryExpression) right).getOperator().equals("%") ) {
-					yield (left.eval() + (right.eval() * left.eval()));
+		return switch ( operator ) {
+			case "+" -> {
+				if ( right instanceof UnaryExpression ) {
+					if ( ((UnaryExpression) right).getOperator().equals( "%" ) ) {
+						yield (left.eval() + (right.eval() * left.eval()));
+					}
 				}
+				yield (left.eval() + right.eval());
 			}
-			yield (left.eval() + right.eval());				
-		}
-		case "-" -> (left.eval() - right.eval());
-		case "*" -> (left.eval() * right.eval());
-		case "/" -> (left.eval() / right.eval());
-		case "^" -> Math.pow(left.eval(), right.eval());
-		default -> throw new IllegalArgumentException("Unexpected value: " + operator);
+			case "-" -> (left.eval() - right.eval());
+			case "*" -> (left.eval() * right.eval());
+			case "/" -> (left.eval() / right.eval());
+			case "^" -> Math.pow( left.eval(), right.eval() );
+			default -> throw new IllegalArgumentException( "Unexpected value: " + operator );
 		};
 	}
 
 	@Override
 	public String print() {
-		return switch (operator) {
-			case "+","-","*","/","^" -> 
-				String.format("(%s %s %s)", left.print(), operator, right.print());
-			default -> throw new IllegalArgumentException("Unexpected value: " + operator);
+		return switch ( operator ) {
+			case "+", "-", "*", "/", "^" -> String.format( "(%s %s %s)", left.print(), operator, right.print() );
+			default -> throw new IllegalArgumentException( "Unexpected value: " + operator );
 		};
 	}
-	
-	
 
-//	@Override
-//	public String toString() {
-//		return print();
-//	}
+	@Override
+	public String toString() {
+		return print();
+	}
+
+	public String getAst() {
+		return getAst( 0 );
+	}
+
+	private String getAst(int indentLevel) {
+		String indent = "  ".repeat( indentLevel );
+		System.out.println( indent + "BinaryExpression:" );
+		System.out.println( indent + "  operator: " + operator );
+		System.out.println( indent + "  left:" );
+		if ( left instanceof BinaryExpression ) {
+			((BinaryExpression) left).getAst( indentLevel + 1 );
+		} else {
+			System.out.println( indent + "    " + left.print() );
+		}
+		System.out.println( indent + "  right:" );
+		if ( right instanceof BinaryExpression ) {
+			((BinaryExpression) right).getAst( indentLevel + 1 );
+		} else {
+			System.out.println( indent + "    " + right.print() );
+		}
+		return indent;
+	}
 
 }
