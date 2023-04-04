@@ -22,6 +22,7 @@ jobs:
           javac -d bin src/cx/ksim/mather/*.java
           jar cf Mather.jar -C bin .
       - name: Release JAR
+        id: release_jar
         uses: actions/upload-artifact@v2
         with:
           name: Mather
@@ -32,7 +33,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ steps.release_jar.outputs.upload_url }}
           asset_path: ./Mather.jar
           asset_name: Mather.jar
           asset_content_type: application/java-archive
