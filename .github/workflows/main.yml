@@ -16,7 +16,7 @@ jobs:
       uses: actions/checkout@v2.7.0
     - name: Build JAR
       run: |
-        javac -d bin src/cx/ksim/mater/*.java
+        javac -d bin src/cx/ksim/mather/*.java
         jar -cf mather.jar -C bin/ .
     - name: Create Release
       id: create_release
