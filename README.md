@@ -40,3 +40,8 @@ Digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
 - Support for % operation
 <!-- TODO -->
 # Build the project
+## Issues
+- Better Error Handeling
+- Degree & Radian Mode
+- AST's view & modification
+- Support for % operation

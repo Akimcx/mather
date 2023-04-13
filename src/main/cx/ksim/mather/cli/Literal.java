@@ -1,9 +1,10 @@
 package cx.ksim.mather;
 
-public class LiteralNode implements Expression {
+public class Literal extends Expression {
 
 	private double value;
-	public LiteralNode(double value) {
+
+	public Literal(double value) {
 		this.value = value;
 	}
 
@@ -14,14 +15,12 @@ public class LiteralNode implements Expression {
 
 	@Override
 	public String print() {
-		return Double.toString(value);
+		return Double.toString( value );
 	}
 
 	@Override
 	public String toString() {
 		return print();
 	}
-	
-	
 
 }
