@@ -1,8 +1,16 @@
 package cx.ksim.mather;
 
-public interface Expression {
-	abstract double eval();
+public abstract class Expression {
+	private String operator;
 
-	abstract String print();
+	public String getOperator() {
+		return operator;
+	}
+
+//	public abstract void printAst();
+
+	public abstract double eval();
+
+	public abstract String print();
 
 }

@@ -34,3 +34,10 @@ javac -d bin src/cx/ksim/mather/Lexer.java
 javac -cp bin -d bin src/cx/ksim/mather/Parser.java
 java -cp bin src/cx/ksim/mather/Parser.java
 ```
+
+
+## Issues
+- Better Error Handeling
+- Degree & Radian Mode
+- AST's view & modification
+- Support for % operation

@@ -13,44 +13,50 @@ class LexerTest {
 
 	@Test
 	void itShouldReturnAnEmptyOptinal() {
-		Lexer lexer = new Lexer("1+1");
+		Lexer lexer = new Lexer( "1+1" );
 		lexer.next();
 		lexer.next();
 		lexer.next();
-		assertThat(lexer.peek()).isEmpty();
+		assertThat( lexer.peek() ).isEmpty();
 	}
-	
+
+	@Test
+	void itShouldThrowANumberFormatException() {
+		assertThatThrownBy( () -> new Lexer( "45.22.5" ) ).isInstanceOf( NumberFormatException.class );
+
+	}
+
 	@Test
 	void itShouldThrowAnUnknowCharacterException() {
-		assertThatThrownBy(() -> {
-			new Lexer("1x1");
-		}).isInstanceOf(UnknowCharacterException.class)
-		.hasMessage("Unknown function call x");
+		assertThatThrownBy( () -> new Lexer( "1x1" ) ).isInstanceOf( UnknowCharacterException.class )
+				.hasMessage( "Unknown function call x" );
 	}
-	
+
 	@Test
 	void itShouldLexeFactToken() {
-		Lexer lexer = new Lexer("6!");
+		Lexer lexer = new Lexer( "6!" );
+		lexer.next();
+		assertThat( lexer.next().kind() ).isEqualTo( TokenKind.UNARY_OP );
 	}
-	
+
 	@Test
 	void itShouldProduceAFLoat() {
-		Lexer lexer = new Lexer("1.");
-		assertThat(lexer.peek().get().kind()).isEqualTo(TokenKind.NUMBER);
-		lexer = new Lexer(".1");
-		assertThat(lexer.peek().get().kind()).isEqualTo(TokenKind.NUMBER);
+		Lexer lexer = new Lexer( "1." );
+		assertThat( lexer.peek().get().kind() ).isEqualTo( TokenKind.NUMBER );
+		lexer = new Lexer( ".1" );
+		assertThat( lexer.peek().get().kind() ).isEqualTo( TokenKind.NUMBER );
 	}
-	
+
 	@Test
 	void itShouldProduceAnOpenParen() {
-		Lexer lexer = new Lexer("(");
-		assertThat(lexer.peek().get().kind()).isEqualTo(TokenKind.OPEN_PAREN);
+		Lexer lexer = new Lexer( "(" );
+		assertThat( lexer.peek().get().kind() ).isEqualTo( TokenKind.OPEN_PAREN );
 	}
-	
+
 	@Test
 	void itShouldProduceACloseParen() {
-		Lexer lexer = new Lexer(")");
-		assertThat(lexer.peek().get().kind()).isEqualTo(TokenKind.CLOSE_PAREN);
+		Lexer lexer = new Lexer( ")" );
+		assertThat( lexer.peek().get().kind() ).isEqualTo( TokenKind.CLOSE_PAREN );
 	}
 
 }

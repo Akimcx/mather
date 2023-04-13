@@ -85,23 +85,21 @@ public class Parser {
 	// Factor = ( Number | "(" Expression ")"
 	// | Function_Name, "(" Expression ")" ) [ Unary_OP ];
 	private static Expression parseFactor(Token t) {
-		Expression a;
-		switch ( t.kind() ) {
-			case NUMBER -> a = new LiteralNode( Double.parseDouble( t.value() ) );
+		Expression a = switch ( t.kind() ) {
+			case NUMBER -> new Literal( Double.parseDouble( t.value() ) );
 			case OPEN_PAREN -> {
 				a = parseExpression();
 				expect( TokenKind.CLOSE_PAREN );
-				lexer.next();
+				yield a;
 			}
 			case FUNC_CALL -> {
 				expect( TokenKind.OPEN_PAREN );
-				lexer.next();
 				a = new UnaryExpression( parseExpression(), t.value() );
 				expect( TokenKind.CLOSE_PAREN );
-				lexer.next();
+				yield a;
 			}
 			default -> throw new IllegalTokenException( String.format( "You cannot have the token [%s] here", t ) );
-		}
+		};
 		if ( lexer.hasNext() ) {
 			t = lexer.peek().get();
 			if ( t.kind() == TokenKind.UNARY_OP ) {
@@ -117,16 +115,16 @@ public class Parser {
 		if ( lexer.peek().get().kind() != kind ) {
 			throw new IllegalTokenException( String.format( "Expected %s but got %s\n", kind, lexer.peek().get() ) );
 		}
+		lexer.next();
 	}
 
-//	public static void main(String[] args) {
-//		Parser parser = new Parser();
-////		for( String arg : args) {
-////			Node a = parser.parse(arg);
-////			System.out.printf("%s = %s\n", arg, a.eval());
-////		}
-//		String s = "(6)4";
-//		Node a = parser.parse( s );
-//		System.out.printf( "%s -> %s\n", s, a.eval() );
-//	}
+	public static void main(String[] args) {
+//		for( String arg : args) {
+//			Node a = parser.parse(arg);
+//			System.out.printf("%s = %s\n", arg, a.eval());
+//		}
+		String s = "sin(90)% / cos(13%)";
+		Expression a = Parser.parse( s );
+		System.out.printf( "%s -> %s = %s\n", s, a, a.eval() );
+	}
 }

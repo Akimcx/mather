@@ -1,6 +1,6 @@
 package cx.ksim.mather;
 
-public class BinaryExpression implements Expression {
+public class BinaryExpression extends Expression {
 
 	private Expression left;
 	private Expression right;
@@ -16,10 +16,8 @@ public class BinaryExpression implements Expression {
 	public double eval() {
 		return switch ( operator ) {
 			case "+" -> {
-				if ( right instanceof UnaryExpression ) {
-					if ( ((UnaryExpression) right).getOperator().equals( "%" ) ) {
-						yield (left.eval() + (right.eval() * left.eval()));
-					}
+				if ( right instanceof UnaryExpression r && r.getOperator().equals( "%" ) ) {
+					yield (left.eval() + (right.eval() * left.eval()));
 				}
 				yield (left.eval() + right.eval());
 			}
@@ -34,7 +32,8 @@ public class BinaryExpression implements Expression {
 	@Override
 	public String print() {
 		return switch ( operator ) {
-			case "+", "-", "*", "/", "^" -> String.format( "(%s %s %s)", left.print(), operator, right.print() );
+			case "+", "-", "^" -> String.format( "%s %s %s", left.print(), operator, right.print() );
+			case "*", "/" -> String.format( "(%s %s %s)", left.print(), operator, right.print() );
 			default -> throw new IllegalArgumentException( "Unexpected value: " + operator );
 		};
 	}

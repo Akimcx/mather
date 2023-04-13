@@ -32,11 +32,9 @@ public class Lexer implements Iterator<Token> {
 				while ( i < len && (Character.isDigit( currentChar = expr.charAt( i ) ) || currentChar == '.') ) {
 					if ( currentChar == '.' ) {
 						if ( isFloat ) {
-							throw new IllegalCharacterException(
-									String.format( "You cannot have a [%s] here", currentChar ) );
-						} else {
-							isFloat = true;
+							throw new NumberFormatException();
 						}
+						isFloat = true;
 					}
 					num += Character.toString( currentChar );
 					i++;
@@ -53,8 +51,13 @@ public class Lexer implements Iterator<Token> {
 				i--;
 				switch ( funcCall ) {
 					case "sin", "cos", "tang", "log", "ln" -> tokens.add( new Token( TokenKind.FUNC_CALL, funcCall ) );
-					default ->
-						throw new UnknowCharacterException( String.format( "Unknown function call %s", funcCall ) );
+					default -> {
+//						throw new UnknowCharacterException(
+						System.err.println( String.format(
+								"Unknown function call %s: %s\n"
+										+ " ".repeat( i + "Unknown function call : ".length() + 1 ) + "^",
+								funcCall, expr ) );
+					}
 				}
 			} else if ( currentChar == '+' ) {
 				tokens.add( new Token( TokenKind.PLUS, Character.toString( currentChar ) ) );
@@ -92,7 +95,7 @@ public class Lexer implements Iterator<Token> {
 
 	public Token next() {
 		if ( !hasNext() )
-			throw new NoSuchElementException();
+			throw new NoSuchElementException( "You've reached End Of Token Stream" );
 		cursor += 1;
 		return this.iterator.next();
 	}

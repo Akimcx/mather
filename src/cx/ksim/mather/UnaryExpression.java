@@ -1,6 +1,6 @@
 package cx.ksim.mather;
 
-public class UnaryExpression implements Expression {
+public class UnaryExpression extends Expression {
 
 	private Expression node;
 	private String operator;
@@ -45,7 +45,7 @@ public class UnaryExpression implements Expression {
 			case "-" -> String.format( "(-%s)", node.print() );
 			case "!" -> String.format( "fact(%s)", node.print() );
 			case "sin" -> String.format( "sin(%s)", node.print() );
-			case "cos" -> String.format( "con(%s)", node.print() );
+			case "cos" -> String.format( "cos(%s)", node.print() );
 			case "tang" -> String.format( "tang(%s)", node.print() );
 			case "%" -> String.format( "(%s)", node.print() );
 			default -> throw new IllegalArgumentException( "Unexpected value: " + operator );
