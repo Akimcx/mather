@@ -1,4 +1,4 @@
-package cx.ksim.mather;
+package cx.ksim.mather.cli;
 
 public enum ExpressionToken implements TokenKind {
 	PLUS("+"),MINUS("-");

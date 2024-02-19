@@ -1,4 +1,4 @@
-package cx.ksim.mather;
+package cx.ksim.mather.cli;
 
 public class LiteralNode implements Expression {
 

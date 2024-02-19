@@ -1,4 +1,4 @@
-package cx.ksim.mather;
+package cx.ksim.mather.cli;
 
 public class Parser {
 
@@ -18,7 +18,7 @@ public class Parser {
 		Token token = lexer.next();
 		Expression a = switch (token.kind()) {
 			case ExpressionToken t when t == ExpressionToken.MINUS -> {
-				Expression term = parseTerm(token);
+				Expression term = parseTerm(lexer.next());
 				yield new UnaryExpression(term,t.operator());
 			}
 			case ExpressionToken t -> {
@@ -158,8 +158,7 @@ public class Parser {
 	public static void main(String[] args) {
 		for (String arg : args) {
 			var expr = Parser.parse(arg);
-			System.out.println(expr);
-			System.out.printf("%s = %s\n", arg, expr.eval());
+			System.out.println(expr.eval());
 		}
 	}
 }

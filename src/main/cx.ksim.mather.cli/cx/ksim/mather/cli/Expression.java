@@ -1,4 +1,4 @@
-package cx.ksim.mather;
+package cx.ksim.mather.cli;
 
 public interface Expression {
 	abstract double eval();

@@ -1,4 +1,4 @@
-package cx.ksim.mather;
+package cx.ksim.mather.cli;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -41,7 +41,7 @@ public class Lexer implements Iterator<Token> {
 					num += Character.toString( currentChar );
 					i++;
 				}
-				tokens.add( new Token( TokenKind.NUMBER, num ) );
+				tokens.add( new Token( FactorToken.NUMBER, num ) );
 				i--;
 			} else if ( currentChar >= 'a' && currentChar <= 'z' ) {
 				String funcCall = currentChar + "";
@@ -52,28 +52,28 @@ public class Lexer implements Iterator<Token> {
 				}
 				i--;
 				switch ( funcCall ) {
-					case "sin", "cos", "tang", "log", "ln" -> tokens.add( new Token( TokenKind.FUNC_CALL, funcCall ) );
+					case "sin", "cos", "tang", "log", "ln" -> tokens.add( new Token( FactorToken.FUNC_CALL, funcCall ) );
 					default ->
 						throw new UnknowCharacterException( String.format( "Unknown function call %s", funcCall ) );
 				}
 			} else if ( currentChar == '+' ) {
-				tokens.add( new Token( TokenKind.PLUS, Character.toString( currentChar ) ) );
+				tokens.add( new Token( ExpressionToken.PLUS, Character.toString( currentChar ) ) );
 			} else if ( currentChar == '-' ) {
-				tokens.add( new Token( TokenKind.MINUS, Character.toString( currentChar ) ) );
+				tokens.add( new Token( ExpressionToken.MINUS, Character.toString( currentChar ) ) );
 			} else if ( currentChar == '*' ) {
-				tokens.add( new Token( TokenKind.MULT, Character.toString( currentChar ) ) );
+				tokens.add( new Token( TermToken.MULT, Character.toString( currentChar ) ) );
 			} else if ( currentChar == '/' ) {
-				tokens.add( new Token( TokenKind.DIV, Character.toString( currentChar ) ) );
+				tokens.add( new Token( TermToken.DIV, Character.toString( currentChar ) ) );
 			} else if ( currentChar == '(' ) {
-				tokens.add( new Token( TokenKind.OPEN_PAREN, Character.toString( currentChar ) ) );
+				tokens.add( new Token( FactorToken.OPEN_PAREN, Character.toString( currentChar ) ) );
 			} else if ( currentChar == ')' ) {
-				tokens.add( new Token( TokenKind.CLOSE_PAREN, Character.toString( currentChar ) ) );
+				tokens.add( new Token( FactorToken.CLOSE_PAREN, Character.toString( currentChar ) ) );
 			} else if ( currentChar == '!' ) {
-				tokens.add( new Token( TokenKind.UNARY_OP, Character.toString( currentChar ) ) );
+				tokens.add( new Token( FactorToken.UNARY_OP, Character.toString( currentChar ) ) );
 			} else if ( currentChar == '%' ) {
-				tokens.add( new Token( TokenKind.UNARY_OP, Character.toString( currentChar ) ) );
+				tokens.add( new Token( FactorToken.UNARY_OP, Character.toString( currentChar ) ) );
 			} else if ( currentChar == '^' ) {
-				tokens.add( new Token( TokenKind.EXPONENT, Character.toString( currentChar ) ) );
+				// tokens.add( new Token( FactorToken.EXPONENT, Character.toString( currentChar ) ) );
 			} else {
 				throw new UnknowCharacterException( String.format( "Unknown character [%s] found\n", currentChar ) );
 			}

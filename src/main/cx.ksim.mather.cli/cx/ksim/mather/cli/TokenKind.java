@@ -1,4 +1,4 @@
-package cx.ksim.mather;
+package cx.ksim.mather.cli;
 
 public sealed interface TokenKind 
 	permits ExpressionToken,TermToken,FactorToken {
