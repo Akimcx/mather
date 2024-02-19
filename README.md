@@ -30,7 +30,10 @@ Digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
 ## Quick Start
 
 ```console
-javac -d bin src/cx/ksim/mather/Lexer.java
-javac -cp bin -d bin src/cx/ksim/mather/Parser.java
-java -cp bin src/cx/ksim/mather/Parser.java
+./compile.sh
+./run.sh
 ```
+
+
+<!-- TODO -->
+# Build the project
