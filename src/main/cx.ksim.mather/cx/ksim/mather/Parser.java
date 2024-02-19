@@ -15,30 +15,50 @@ public class Parser {
 
 	// Expression = [ "-" | "+" ] Term { "-" | "+" Term };
 	private static Expression parseExpression() {
-		Expression a = null;
 		Token token = lexer.next();
-		if (token.kind() == TokenKind.MINUS) {
-			a = parseTerm(lexer.next());
-			a = new UnaryExpression(a, "-");
-		} else if (token.kind() == TokenKind.PLUS) {
-			a = parseTerm(lexer.next());
-		} else {
-			a = parseTerm(token);
-		}
+		Expression a = switch (token.kind()) {
+			case ExpressionToken t when t == ExpressionToken.MINUS -> {
+				Expression term = parseTerm(token);
+				yield new UnaryExpression(term,t.operator());
+			}
+			case ExpressionToken t -> {
+				yield parseTerm(lexer.next());
+			}
+			case TermToken t -> parseTerm(token);
+			case FactorToken t -> parseTerm(token);
+		};
+		// if (token.kind() == TokenKind.MINUS) {
+		// 	a = parseTerm(lexer.next());
+		// 	a = new UnaryExpression(a, "-");
+		// } else if (token.kind() == TokenKind.PLUS) {
+		// 	a = parseTerm(lexer.next());
+		// } else {
+		// 	a = parseTerm(token);
+		// }
 
 		while (lexer.hasNext()) {
 			token = lexer.peek().get();
-			if (token.kind() == TokenKind.PLUS) {
-				lexer.next();
-				Expression b = parseTerm(lexer.next());
-				a = new BinaryExpression(a, b, "+");
-			} else if (token.kind() == TokenKind.MINUS) {
-				lexer.next();
-				Expression b = parseTerm(lexer.next());
-				a = new BinaryExpression(a, b, "-");
-			} else {
-				return a;
-			}
+			return switch(token.kind()) {
+				case ExpressionToken t -> {
+					lexer.next();
+					Expression b = parseTerm(lexer.next());
+					a = new BinaryExpression(a, b, t.operator());
+					yield a;
+				}
+				case FactorToken t -> a; 
+				case TermToken t -> a;
+			};
+			// if (token.kind() == TokenKind.PLUS) {
+			// 	lexer.next();
+			// 	Expression b = parseTerm(lexer.next());
+			// 	a = new BinaryExpression(a, b, "+");
+			// } else if (token.kind() == TokenKind.MINUS) {
+			// 	lexer.next();
+			// 	Expression b = parseTerm(lexer.next());
+			// 	a = new BinaryExpression(a, b, "-");
+			// } else {
+			// 	return a;
+			// }
 		}
 		return a;
 	}
@@ -49,17 +69,28 @@ public class Parser {
 
 		while (lexer.hasNext()) {
 			Token token = lexer.peek().get();
-			if (token.kind() == TokenKind.MULT) {
-				lexer.next();
-				Expression b = parseExponent(lexer.next());
-				a = new BinaryExpression(a, b, "*");
-			} else if (token.kind() == TokenKind.DIV) {
-				lexer.next();
-				Expression b = parseExponent(lexer.next());
-				a = new BinaryExpression(a, b, "/");
-			} else {
-				return a;
-			}
+			return switch(token.kind()) {
+				case TermToken tk -> {
+					lexer.next();
+					Expression b = parseExponent(lexer.next());
+					a = new BinaryExpression(a, b, tk.operator());
+					yield a;
+				}
+				case ExpressionToken tk -> a;
+				case FactorToken tk -> a;
+
+			};
+			// if (token.kind() == TokenKind.MULT) {
+			// 	lexer.next();
+			// 	Expression b = parseExponent(lexer.next());
+			// 	a = new BinaryExpression(a, b, "*");
+			// } else if (token.kind() == TokenKind.DIV) {
+			// 	lexer.next();
+			// 	Expression b = parseExponent(lexer.next());
+			// 	a = new BinaryExpression(a, b, "/");
+			// } else {
+			// 	return a;
+			// }
 		}
 
 		return a;
@@ -68,16 +99,17 @@ public class Parser {
 	private static Expression parseExponent(Token t) {
 		Expression a = parseFactor(t);
 
-		while (lexer.hasNext()) {
-			Token token = lexer.peek().get();
-			if (token.kind() == TokenKind.EXPONENT) {
-				lexer.next();
-				Expression b = parseFactor(lexer.next());
-				a = new BinaryExpression(a, b, "^");
-			} else {
-				return a;
-			}
-		}
+		// while (lexer.hasNext()) {
+		// 	Token token = lexer.peek().get();
+			
+			// if (token.kind() == TokenKind.EXPONENT) {
+			// 	lexer.next();
+			// 	Expression b = parseFactor(lexer.next());
+			// 	a = new BinaryExpression(a, b, "^");
+			// } else {
+			// 	return a;
+			// }
+		// }
 
 		return a;
 	}
@@ -85,27 +117,29 @@ public class Parser {
 	// Factor = ( Number | "(" Expression ")"
 	// | Function_Name, "(" Expression ")" ) [ Unary_OP ];
 	private static Expression parseFactor(Token t) {
-		Expression a;
-		switch (t.kind()) {
+		Expression a = null;
+		if(!(t.kind() instanceof FactorToken factorToken)) {
+			throw new IllegalArgumentException();
+		}
+		switch (factorToken) {
 			case NUMBER -> a = new LiteralNode(Double.parseDouble(t.value()));
 			case OPEN_PAREN -> {
 				a = parseExpression();
-				expect(TokenKind.CLOSE_PAREN);
+				expect(FactorToken.CLOSE_PAREN);
 				lexer.next();
 			}
 			case FUNC_CALL -> {
-				expect(TokenKind.OPEN_PAREN);
+				expect(FactorToken.OPEN_PAREN);
 				lexer.next();
 				a = new UnaryExpression(parseExpression(), t.value());
-				expect(TokenKind.CLOSE_PAREN);
+				expect(FactorToken.CLOSE_PAREN);
 				lexer.next();
 			}
-			default -> throw new IllegalTokenException(
-					String.format("You cannot have the token [%s] here", t));
+			case CLOSE_PAREN, UNARY_OP -> throw new UnsupportedOperationException("Unimplemented case: " + factorToken);
 		}
 		if (lexer.hasNext()) {
 			t = lexer.peek().get();
-			if (t.kind() == TokenKind.UNARY_OP) {
+			if (t.kind() == FactorToken.UNARY_OP) {
 				a = new UnaryExpression(a, t.value());
 				lexer.next();
 			}
@@ -124,6 +158,7 @@ public class Parser {
 	public static void main(String[] args) {
 		for (String arg : args) {
 			var expr = Parser.parse(arg);
+			System.out.println(expr);
 			System.out.printf("%s = %s\n", arg, expr.eval());
 		}
 	}
