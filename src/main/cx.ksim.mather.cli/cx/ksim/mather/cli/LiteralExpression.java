@@ -1,9 +1,9 @@
 package cx.ksim.mather.cli;
 
-public class LiteralNode implements Expression {
+public final class LiteralExpression implements Expression {
 
 	private double value;
-	public LiteralNode(double value) {
+	public LiteralExpression(double value) {
 		this.value = value;
 	}
 

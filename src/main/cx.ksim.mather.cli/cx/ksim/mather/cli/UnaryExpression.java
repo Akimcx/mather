@@ -1,6 +1,6 @@
 package cx.ksim.mather.cli;
 
-public class UnaryExpression implements Expression {
+public final class UnaryExpression implements Expression {
 
 	private Expression node;
 	private String operator;

@@ -1,6 +1,6 @@
 package cx.ksim.mather.cli;
 
-public class BinaryExpression implements Expression {
+public final class BinaryExpression implements Expression {
 
 	private Expression left;
 	private Expression right;
