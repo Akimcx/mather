@@ -16,10 +16,8 @@ public final class BinaryExpression implements Expression {
 	public double eval() {
 		return switch ( operator ) {
 			case "+" -> {
-				if ( right instanceof UnaryExpression ) {
-					if ( ((UnaryExpression) right).getOperator().equals( "%" ) ) {
-						yield (left.eval() + (right.eval() * left.eval()));
-					}
+				if ( right instanceof UnaryExpression r  &&  r.getOperator().equals( "%" ) ) {
+					yield (left.eval() + (right.eval() * left.eval()));
 				}
 				yield (left.eval() + right.eval());
 			}
@@ -53,14 +51,14 @@ public final class BinaryExpression implements Expression {
 		System.out.println( indent + "BinaryExpression:" );
 		System.out.println( indent + "  operator: " + operator );
 		System.out.println( indent + "  left:" );
-		if ( left instanceof BinaryExpression ) {
-			((BinaryExpression) left).getAst( indentLevel + 1 );
+		if ( left instanceof BinaryExpression l) {
+			l.getAst( indentLevel + 1 );
 		} else {
 			System.out.println( indent + "    " + left.print() );
 		}
 		System.out.println( indent + "  right:" );
-		if ( right instanceof BinaryExpression ) {
-			((BinaryExpression) right).getAst( indentLevel + 1 );
+		if ( right instanceof BinaryExpression r) {
+			r.getAst( indentLevel + 1 );
 		} else {
 			System.out.println( indent + "    " + right.print() );
 		}
