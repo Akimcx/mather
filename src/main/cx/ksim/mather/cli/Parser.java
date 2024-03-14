@@ -7,19 +7,14 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
-@Command(
-	name = "mather",version = "1.0.0",description = "Evaluate mathematical expression",
-	mixinStandardHelpOptions = true
-)
+@Command(name = "mather", version = "1.0.0", description = "Evaluate mathematical expression", mixinStandardHelpOptions = true)
 public class Parser implements Callable<Integer> {
 
-	@Parameters(index = "0..*", arity = "1..*", description = "The expressions to evaluate") String[] expressions;
-	@Option(
-		names = { "-p", "--print" }, description = "Pretty print the AST", negatable = true,
-		defaultValue = "false"
-	)
+	@Parameters(index = "0..*", arity = "1..*", description = "The expressions to evaluate")
+	String[] expressions;
+	@Option(names = { "-p",
+			"--print" }, description = "Pretty print the AST", negatable = true, defaultValue = "false")
 	private boolean prettyPrint;
-
 
 	private static Lexer lexer;
 
@@ -41,7 +36,7 @@ public class Parser implements Callable<Integer> {
 				yield new UnaryExpression(term, t.operator());
 			}
 			case ExpressionToken t -> {
-			yield parseTerm(lexer.next());
+				yield parseTerm(lexer.next());
 			}
 			case TermToken t -> parseTerm(token);
 			case FactorToken t -> parseTerm(token);
@@ -60,7 +55,7 @@ public class Parser implements Callable<Integer> {
 			return switch (token.kind()) {
 				case ExpressionToken t -> {
 					lexer.next();
-				Expression b = parseTerm(lexer.next());
+					Expression b = parseTerm(lexer.next());
 					a = new BinaryExpression(a, b, t.operator());
 					yield a;
 				}
@@ -155,10 +150,10 @@ public class Parser implements Callable<Integer> {
 				lexer.next();
 			}
 			case CLOSE_PAREN, UNARY_OP ->
-			throw new UnsupportedOperationException("Unimplemented case: " + factorToken);
+				throw new UnsupportedOperationException("Unimplemented case: " + factorToken);
 		}
 		if (lexer.hasNext()) {
-		t = lexer.peek().get();
+			t = lexer.peek().get();
 			if (t.kind() == FactorToken.UNARY_OP) {
 				a = new UnaryExpression(a, t.value());
 				lexer.next();
@@ -169,9 +164,9 @@ public class Parser implements Callable<Integer> {
 	}
 
 	private static void expect(TokenKind kind) {
-	if (lexer.peek().get().kind() != kind) {
+		if (lexer.peek().get().kind() != kind) {
 			throw new IllegalTokenException(
-				String.format("Expected %s but got %s\n", kind, lexer.peek().get()));
+					String.format("Expected %s but got %s\n", kind, lexer.peek().get()));
 		}
 	}
 
@@ -184,7 +179,11 @@ public class Parser implements Callable<Integer> {
 	public Integer call() throws Exception {
 		for (String expression : expressions) {
 			var expr = Parser.parse(expression);
-			System.out.println(expr.eval());
+			if (prettyPrint) {
+				System.out.println(expr.print());
+			} else {
+				System.out.println(expr.eval());
+			}
 		}
 		return 0;
 	}
