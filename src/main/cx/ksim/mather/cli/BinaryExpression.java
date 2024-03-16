@@ -14,9 +14,9 @@ public final class BinaryExpression implements Expression {
 
 	@Override
 	public double eval() {
-		return switch ( operator ) {
+		return switch (operator) {
 			case "+" -> {
-				if ( right instanceof UnaryExpression r  &&  r.getOperator().equals( "%" ) ) {
+				if (right instanceof UnaryExpression r && r.getOperator().equals("%")) {
 					yield (left.eval() + (right.eval() * left.eval()));
 				}
 				yield (left.eval() + right.eval());
@@ -24,16 +24,17 @@ public final class BinaryExpression implements Expression {
 			case "-" -> (left.eval() - right.eval());
 			case "*" -> (left.eval() * right.eval());
 			case "/" -> (left.eval() / right.eval());
-			case "^" -> Math.pow( left.eval(), right.eval() );
-			default -> throw new IllegalArgumentException( "Unexpected value: " + operator );
+			case "^" -> Math.pow(left.eval(), right.eval());
+			default -> throw new IllegalArgumentException("Unexpected value: " + operator);
 		};
 	}
 
 	@Override
 	public String print() {
-		return switch ( operator ) {
-			case "+", "-", "*", "/", "^" -> String.format( "(%s %s %s)", left.print(), operator, right.print() );
-			default -> throw new IllegalArgumentException( "Unexpected value: " + operator );
+		return switch (operator) {
+			case "+", "-", "*", "/", "^" ->
+				String.format("(%s %s %s)", left.print(), operator, right.print());
+			default -> throw new IllegalArgumentException("Unexpected value: " + operator);
 		};
 	}
 
@@ -43,24 +44,24 @@ public final class BinaryExpression implements Expression {
 	}
 
 	public String getAst() {
-		return getAst( 0 );
+		return getAst(0);
 	}
 
 	private String getAst(int indentLevel) {
-		String indent = "  ".repeat( indentLevel );
-		System.out.println( indent + "BinaryExpression:" );
-		System.out.println( indent + "  operator: " + operator );
-		System.out.println( indent + "  left:" );
-		if ( left instanceof BinaryExpression l) {
-			l.getAst( indentLevel + 1 );
+		String indent = "  ".repeat(indentLevel);
+		System.out.println(indent + "BinaryExpression:");
+		System.out.println(indent + "  operator: " + operator);
+		System.out.println(indent + "  left:");
+		if (left instanceof BinaryExpression l) {
+			l.getAst(indentLevel + 1);
 		} else {
-			System.out.println( indent + "    " + left.print() );
+			System.out.println(indent + "    " + left.print());
 		}
-		System.out.println( indent + "  right:" );
-		if ( right instanceof BinaryExpression r) {
-			r.getAst( indentLevel + 1 );
+		System.out.println(indent + "  right:");
+		if (right instanceof BinaryExpression r) {
+			r.getAst(indentLevel + 1);
 		} else {
-			System.out.println( indent + "    " + right.print() );
+			System.out.println(indent + "    " + right.print());
 		}
 		return indent;
 	}
