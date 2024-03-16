@@ -1,9 +1,10 @@
 package cx.ksim.mather.cli;
 
-public final class LiteralExpression implements Expression {
+public final class LiteralNode implements Expression {
 
 	private double value;
-	public LiteralExpression(double value) {
+
+	public LiteralNode(double value) {
 		this.value = value;
 	}
 
@@ -21,7 +22,5 @@ public final class LiteralExpression implements Expression {
 	public String toString() {
 		return print();
 	}
-	
-	
 
 }
