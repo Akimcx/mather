@@ -21,7 +21,7 @@ Factor = ( Number | "(" Expression ")"
         | Function_Name, "(" Expression ")" ) [ Unary_OP ];
 Unary_OP = "!" | "%";
 Function_Name = "sin" | "cos" | "tan" | "log" | "ln";
-Number = Integer | Float;
+Number = ( Integer | Float ) [ "_" [ Integer | Float ] ] ;
 Float = Integer, ".", Integer;
 Integer = Digit { Digit };
 Digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;

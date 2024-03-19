@@ -29,11 +29,13 @@ public class Lexer implements Iterator<Token> {
         String num = Character.toString(currentChar);
         i++;
         while (i < len) {
-          if (!Character.isDigit(currentChar = expr.charAt(i)) && currentChar != '.') break;
-          if (currentChar == '.' && isFloat) break;
-          else isFloat = true;
-
-          num += Character.toString(currentChar);
+          currentChar = expr.charAt(i);
+          if (!isNum(currentChar)) break;
+          if (currentChar == '.') {
+            if (isFloat) break;
+            else isFloat = true;
+          }
+          if (currentChar != '_') num += Character.toString(currentChar);
           i++;
         }
         tokens.add(new Token(FactorToken.NUMBER, num));
@@ -72,6 +74,10 @@ public class Lexer implements Iterator<Token> {
         tokens.add(new Token(ErrorToken.ERROR, Character.toString(currentChar)));
       }
     }
+  }
+
+  private boolean isNum(char currentChar) {
+    return Character.isDigit(currentChar) || currentChar == '.' || currentChar == '_';
   }
 
   private boolean isUpper(char currentChar) {
