@@ -52,6 +52,9 @@ public class Parser implements Callable<Integer> {
           }
           case TermToken t -> parseTerm(token);
           case FactorToken t -> parseTerm(token);
+          case ErrorToken err -> {
+            throw new UnknowCharacterException(token.value());
+          }
         };
 
     while (lexer.hasNext()) {
@@ -67,6 +70,9 @@ public class Parser implements Callable<Integer> {
         }
         case TermToken t -> {
           return a;
+        }
+        case ErrorToken err -> {
+          throw new UnknowCharacterException(token.value());
         }
       }
     }
@@ -90,6 +96,9 @@ public class Parser implements Callable<Integer> {
         }
         case FactorToken tk -> {
           return a;
+        }
+        case ErrorToken err -> {
+          throw new UnknowCharacterException(token.value());
         }
       }
     }
