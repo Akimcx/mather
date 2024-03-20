@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Locale.Builder;
 
 public class Lexer implements Iterator<Token> {
 
@@ -26,7 +27,7 @@ public class Lexer implements Iterator<Token> {
       if (Character.isDigit(currentChar) || currentChar == '.') {
         boolean isFloat = currentChar == '.';
 
-        String num = Character.toString(currentChar);
+        StringBuilder builder = new StringBuilder(currentChar);
         i++;
         while (i < len) {
           currentChar = expr.charAt(i);
@@ -35,22 +36,22 @@ public class Lexer implements Iterator<Token> {
             if (isFloat) break;
             else isFloat = true;
           }
-          if (currentChar != '_') num += Character.toString(currentChar);
+          if (currentChar != '_') builder.append(currentChar);
           i++;
         }
-        tokens.add(new Token(FactorToken.NUMBER, num));
+        tokens.add(new Token(FactorToken.NUMBER, builder.toString()));
         i--;
       } else if (currentChar >= 'a' && currentChar <= 'z') {
-        String funcCall = Character.toString(currentChar);
+        StringBuilder builder = new StringBuilder(currentChar);
         i++;
         while (i < len) {
           currentChar = expr.charAt(i);
           if (!isLower(currentChar) && !isUpper(currentChar)) break;
-          funcCall += Character.toString(currentChar);
+          builder.append(currentChar);
           i++;
         }
         i--;
-        tokens.add(new Token(FactorToken.FUNC_CALL, funcCall));
+        tokens.add(new Token(FactorToken.FUNC_CALL, builder.toString()));
       } else if (currentChar == '+') {
         tokens.add(new Token(ExpressionToken.PLUS, Character.toString(currentChar)));
       } else if (currentChar == '-') {
