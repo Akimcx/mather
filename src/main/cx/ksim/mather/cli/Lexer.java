@@ -27,7 +27,8 @@ public class Lexer implements Iterator<Token> {
       if (Character.isDigit(currentChar) || currentChar == '.') {
         boolean isFloat = currentChar == '.';
 
-        StringBuilder builder = new StringBuilder(currentChar);
+        StringBuilder builder = new StringBuilder();
+        builder.append(currentChar);
         i++;
         while (i < len) {
           currentChar = expr.charAt(i);
@@ -42,7 +43,8 @@ public class Lexer implements Iterator<Token> {
         tokens.add(new Token(FactorToken.NUMBER, builder.toString()));
         i--;
       } else if (currentChar >= 'a' && currentChar <= 'z') {
-        StringBuilder builder = new StringBuilder(currentChar);
+        StringBuilder builder = new StringBuilder();
+        builder.append(currentChar);
         i++;
         while (i < len) {
           currentChar = expr.charAt(i);
@@ -75,7 +77,7 @@ public class Lexer implements Iterator<Token> {
         tokens.add(new Token(ErrorToken.ERROR, Character.toString(currentChar)));
       }
     }
-  }
+    }
 
   private boolean isNum(char currentChar) {
     return Character.isDigit(currentChar) || currentChar == '.' || currentChar == '_';
