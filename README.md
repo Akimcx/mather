@@ -16,7 +16,7 @@ The expressions are defined by the EBNF rules:
 
 ```EBNF
 Expression = [ "-" | "+" ] Term { "-" | "+" Term };
-Term = Factor { "*" | "/" Factor };
+Term = Factor { "*" | "/" | "^" Factor };
 Factor = ( Number | "(" Expression ")"
         | Function_Name, "(" Expression ")" ) [ Unary_OP ];
 Unary_OP = "!" | "%";
