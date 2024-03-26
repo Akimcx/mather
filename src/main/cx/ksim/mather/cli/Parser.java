@@ -112,14 +112,11 @@ public class Parser implements Callable<Integer> {
             case OPEN_PAREN -> {
                 a = parseExpression();
                 expect(FactorToken.CLOSE_PAREN);
-                lexer.next();
             }
             case FUNC_CALL -> {
                 expect(FactorToken.OPEN_PAREN);
-                lexer.next();
                 a = new UnaryExpression(parseExpression(), t.value());
                 expect(FactorToken.CLOSE_PAREN);
-                lexer.next();
             }
             case CLOSE_PAREN, UNARY_OP ->
                 throw new UnsupportedOperationException("Unimplemented case: " + factorToken);
@@ -139,6 +136,7 @@ public class Parser implements Callable<Integer> {
             throw new IllegalTokenException(
                     String.format("Expected %s but got %s\n", kind, lexer.peek().get()));
         }
+        lexer.next();
     }
 
     public static void main(String[] args) {
